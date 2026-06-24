@@ -3,6 +3,7 @@ import { Chess } from "chess.js";
 import { useState } from "react";
 
 function App() {
+  const API_URL = import.meta.env.VITE_API_URL;
   const [game, setGame] = useState(new Chess());
   const [pendingMove, setPendingMove] = useState(null);
   const [gameResult, setGameResult] = useState(null);
@@ -22,7 +23,8 @@ function App() {
   }
 
   async function sendSkill(skillString) {
-    const response = await fetch("http://localhost:8000/api/select-skill", {
+    // Replace with your localhost:8000 if deploying locally, or the appropriate backend URL if deployed elsewhere
+    const response = await fetch(`${API_URL}/api/select-skill`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -39,7 +41,7 @@ function App() {
   }
 
   async function sendMove(fen) {
-    const response = await fetch("http://localhost:8000/api/moves", {
+    const response = await fetch(`${API_URL}/api/moves`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
