@@ -1,0 +1,17 @@
+{
+    "_comment": "Use a relative path from the repo root so Docker and local runs both work.",
+    "model_paths":{
+        "1000": "configurations/chess_transformer_1k_v1.pth", 
+        "2000": "configurations/chess_transformer_2k_v1.pth"
+    },
+    "vocab_size": 23,
+    "num_moves": 4208,
+    "seq_len": 69,
+
+    "d_model": 128,
+    "n_heads": 8,
+    "n_layers": 4,
+    "dropout": 0.1,
+
+    "temperature": 0.5
+}
