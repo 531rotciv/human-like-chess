@@ -19,7 +19,7 @@ def play_moves(
 
     move_number = board.fullmove_number 
     TEMPERATURE = max(
-        0.5,
+        0.3,
         1.5 * (0.9 ** move_number)
     )
 
@@ -51,6 +51,7 @@ def play_moves(
         temperature=TEMPERATURE
     )
 
+    top_moves = [id_to_move[i] for i in top_ids.tolist()]
     print("\nTop candidates:")
     print(
         f"The Temperature is: "
@@ -108,4 +109,4 @@ def play_moves(
 
 
 
-    return model_move, result, termination
+    return model_move, result, termination,top_moves, top_probs
