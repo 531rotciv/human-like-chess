@@ -14,13 +14,13 @@ For a detailed discussion of the project's motivation, methodology, results, and
 
 ## Running Locally
 
-The recommended way to experience the project is to run it locally, which provides the fastest response times and avoids the cold-start delays associated with free hosting services.
+The recommended way to experience the project is to run it locally, which provides the fastest response times and avoids the cold-start delays and usage limits associated with free hosting services.
 
 ```bash
 docker-compose up --build
 ```
 
-Once the containers have started, open the application in your browser and begin playing against the models.
+Once the containers have started, open the application in your browser at http://localhost:5173/ and begin playing against the models.
 
 ## Online Demo
 
