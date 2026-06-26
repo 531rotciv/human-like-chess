@@ -28,6 +28,6 @@ You can also try the project online:
 
 **https://human-like-chess.vercel.app/**
 
-The React frontend is hosted on Vercel, while the Python backend is hosted on Render using their free service tiers. Consequently, the backend may enter a sleep state after periods of inactivity, causing the initial request to take a minute or longer while the service starts. Subsequent interactions should respond normally.
+The React frontend is hosted on Vercel, while the Python backend is hosted on Render using their free service tiers. Consequently, the backend may enter a sleep state after periods of inactivity, causing the initial request to take a minute or longer while the service starts, moderate-heavy usage will exceed usage limits. Subsequent interactions should respond normally.
 
 For the best experience and lowest latency, running the application locally is recommended.
