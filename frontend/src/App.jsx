@@ -3,7 +3,7 @@ import { Chess } from "chess.js";
 import { useState } from "react";
 
 function App() {
-  const API_URL = import.meta.env.VITE_API_URL;
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000"; // Default to localhost if not set
   const [game, setGame] = useState(new Chess());
   const [pendingMove, setPendingMove] = useState(null);
   const [gameResult, setGameResult] = useState(null);
