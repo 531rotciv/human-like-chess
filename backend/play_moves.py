@@ -24,7 +24,7 @@ def play_moves(
     )
 
     print("\nModel thinking...")
-    time.sleep(2)
+    time.sleep(1)
     if board.is_game_over():
         if board.is_checkmate():
             termination = "checkmate"

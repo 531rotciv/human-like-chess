@@ -11,6 +11,7 @@ function App() {
   const [userColor, setUserColor] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
   const [aiSkill, setAiSkill] = useState(1000);
+  const [topCandidates, setTopCandidates] = useState([]);
 
   function isPromotion(sourceSquare, targetSquare) {
     const piece = game.get(sourceSquare);
@@ -41,6 +42,7 @@ function App() {
   }
 
   async function sendMove(fen) {
+    // Replace with your localhost:8000 if deploying locally, or the appropriate backend URL if deployed elsewhere
     const response = await fetch(`${API_URL}/api/moves`, {
       method: "POST",
       headers: {
@@ -93,6 +95,14 @@ function App() {
       return true;
     }
     const data = await sendMove(gameCopy.fen());
+    if (data?.top_moves && data?.top_probs) {
+      setTopCandidates(
+        data.top_moves.map((move, idx) => ({
+          move,
+          probability: data.top_probs[idx] * 100
+        }))
+      );
+    }
     
     let gameEnded = false;
     if (userColor === "w") {
@@ -182,6 +192,14 @@ function App() {
     }
 
     const data = await sendMove(gameCopy.fen());
+    if (data?.top_moves && data?.top_probs) {
+      setTopCandidates(
+        data.top_moves.map((move, idx) => ({
+          move,
+          probability: data.top_probs[idx] * 100
+        }))
+      );
+    }
     if (data?.move && typeof data.move === "string") {
       gameCopy.move({
         from: data.move.slice(0, 2),
@@ -215,11 +233,20 @@ function App() {
   async function handleStartGame() {
     if (!selectedColor) return;
     await sendSkill(String(aiSkill));
+    setTopCandidates([]);
     setUserColor(selectedColor);
 
     // if user chose black, delay until the model is loaded and then request the first AI move
     if (selectedColor === "b") {
       const data = await sendMove(new Chess().fen());
+      if (data?.top_moves && data?.top_probs) {
+        setTopCandidates(
+          data.top_moves.map((move, idx) => ({
+            move,
+            probability: data.top_probs[idx] * 100
+          }))
+        );
+      }
       if (data?.move && typeof data.move === "string") {
         const gameCopy = new Chess();
         gameCopy.move({
@@ -431,6 +458,60 @@ function App() {
         >
           New Game
         </button>
+        {userColor !== null && (
+          <table
+            style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              marginTop: "20px",
+              backgroundColor: "#fff"
+            }}
+          >
+            <thead>
+              <tr>
+                <th
+                  style={{
+                    textAlign: "left",
+                    borderBottom: "2px solid #ccc",
+                    padding: "8px"
+                  }}
+                >
+                  Moves Considered
+                </th>
+                <th
+                  style={{
+                    textAlign: "left",
+                    borderBottom: "2px solid #ccc",
+                    padding: "8px"
+                  }}
+                >
+                  Probability Assigned
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {topCandidates.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={2}
+                    style={{ padding: "8px", borderBottom: "1px solid #eee", color: "#666" }}
+                  >
+                    Waiting for AI move...
+                  </td>
+                </tr>
+              ) : (
+                topCandidates.map(({ move, probability }, index) => (
+                  <tr key={index}>
+                    <td style={{ padding: "8px", borderBottom: "1px solid #eee" }}>{move}</td>
+                    <td style={{ padding: "8px", borderBottom: "1px solid #eee" }}>
+                      {probability.toFixed(2)}%
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        )}
       </div>
 
       {showResignConfirm && (

@@ -102,7 +102,7 @@ def get_move(
         raise HTTPException(status_code=400, detail="AI skill not selected. Call /api/select-skill first.")
     try:
         print("current_skill", current_skill)
-        move, result, termination = play_moves(
+        move, result, termination, top_moves, top_probs = play_moves(
             current_model,
             request.fen,
             device
@@ -111,7 +111,9 @@ def get_move(
         return {
             "move": move,
             "result": result,
-            "termination": termination
+            "termination": termination,
+            "top_moves": top_moves,
+            "top_probs": [float(p) for p in top_probs]
         }
     except Exception as e:
         print("Error in /api/moves:", e)
