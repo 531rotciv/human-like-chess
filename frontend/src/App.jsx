@@ -12,6 +12,7 @@ function App() {
   const [selectedColor, setSelectedColor] = useState(null);
   const [aiSkill, setAiSkill] = useState(1000);
   const [topCandidates, setTopCandidates] = useState([]);
+  const [aiMove, setAiMove] = useState(null);
 
   function isPromotion(sourceSquare, targetSquare) {
     const piece = game.get(sourceSquare);
@@ -102,6 +103,9 @@ function App() {
           probability: data.top_probs[idx] * 100
         }))
       );
+    }
+    if (data?.move) {
+      setAiMove(data.move);
     }
     
     let gameEnded = false;
@@ -200,6 +204,9 @@ function App() {
         }))
       );
     }
+    if (data?.move) {
+      setAiMove(data.move);
+    }
     if (data?.move && typeof data.move === "string") {
       gameCopy.move({
         from: data.move.slice(0, 2),
@@ -246,6 +253,9 @@ function App() {
             probability: data.top_probs[idx] * 100
           }))
         );
+      }
+      if (data?.move) {
+        setAiMove(data.move);
       }
       if (data?.move && typeof data.move === "string") {
         const gameCopy = new Chess();
@@ -501,7 +511,12 @@ function App() {
                 </tr>
               ) : (
                 topCandidates.map(({ move, probability }, index) => (
-                  <tr key={index}>
+                  <tr 
+                    key={index}
+                    style={{
+                      backgroundColor: aiMove === move ? "rgba(255, 255, 0, 0.3)" : "transparent"
+                    }}
+                  >
                     <td style={{ padding: "8px", borderBottom: "1px solid #eee" }}>{move}</td>
                     <td style={{ padding: "8px", borderBottom: "1px solid #eee" }}>
                       {probability.toFixed(2)}%
